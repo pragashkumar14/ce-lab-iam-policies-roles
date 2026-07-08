@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "../ce-lab-cloud-fundamentals"
+		},
+		{
+			"path": "../ce-lab-exploring-aws-services"
+		},
+		{
+			"path": "../ce-lab-aws-cli-basics"
+		},
+		{
+			"path": "../ce-lab-iam-basics"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}

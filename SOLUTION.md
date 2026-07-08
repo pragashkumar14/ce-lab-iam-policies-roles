@@ -1,8 +1,8 @@
 # Lab Solution: IAM Policies and Roles
 
-**Student Name:** ___________________________  
-**Date:** ___________________________  
-**Lab Completion Time:** ___________ minutes
+**Student Name:** Pragash KUMARAVEL 
+**Date:** 08-07-26  
+**Lab Completion Time:** 12h30 minutes
 
 ---
 
@@ -14,38 +14,32 @@
 
 **Version:**
 ```
-_____________________________________________________________
-_____________________________________________________________
+It will be always 2012-10-17 as it is the current, standard version of the policy language.
 ```
 
 **Statement:**
 ```
-_____________________________________________________________
-_____________________________________________________________
+Statement key is followed by an array containing objects,each object inside the array is an individual rule.
 ```
 
 **Sid:**
 ```
-_____________________________________________________________
-_____________________________________________________________
+Sid will be the first stament and an optional stament ID.
 ```
 
 **Effect:**
 ```
-_____________________________________________________________
-_____________________________________________________________
+This stament results only allow or deny,
 ```
 
 **Action:**
 ```
-_____________________________________________________________
-_____________________________________________________________
+The specific (S3 bucket) sperations are granting or blocking.
 ```
 
 **Resource:**
 ```
-_____________________________________________________________
-_____________________________________________________________
+The specific AWS resources the action applies to, defined by their Amazon Resource Name (ARN)
 ```
 
 ---
@@ -54,9 +48,9 @@ _____________________________________________________________
 
 ### S3 Read-Only Policy
 
-**Policy Name:** ___________________________
+**Policy Name:** S3-ReadOnly-SpecificBucket
 
-**Bucket Name Used:** ___________________________
+**Bucket Name Used:** pragash-kumar-bucket
 
 **Policy JSON:**
 ```json
@@ -77,9 +71,9 @@ _____________________________________________________________
 
 ### EC2 Start/Stop Policy
 
-**Policy Name:** ___________________________
+**Policy Name:** S3-ReadOnly-SpecificBucket
 
-**Policy ARN:** ___________________________
+**Policy ARN:** arn:aws:iam::033216807267
 
 **Screenshot 2: EC2 Custom Policy**
 ![EC2 Policy](screenshots/02-ec2-policy.png)
@@ -88,10 +82,10 @@ _____________________________________________________________
 
 ### CloudWatch Logs Write Policy
 
-**Policy Name:** ___________________________
+**Policy Name:** CloudWatch-Logs-Write-Only
 
-**Policy ARN:** ___________________________
-
+**Policy ARN:** arn:aws:iam::033216807267
+______________________
 **Screenshot 3: CloudWatch Logs Policy**
 ![CloudWatch Policy](screenshots/03-cloudwatch-policy.png)
 
@@ -101,9 +95,9 @@ _____________________________________________________________
 
 ### Policy Attached to User
 
-**User Name:** ___________________________
+**User Name:** alice
 
-**Policy Attached:** ___________________________
+**Policy Attached:** S3-ReadOnly-SpecificBucket
 
 **Attachment Method:** ☐ Console ☐ CLI
 
@@ -122,14 +116,14 @@ _____________________________________________________________
 
 ### EC2 Service Role
 
-**Role Name:** ___________________________
+**Role Name:** EC2-S3-ReadOnly-Role
 
-**Role ARN:** ___________________________
+**Role ARN:** arn:aws:iam::033216807267:role/EC2-S3-ReadOnly-Role
 
 **Trusted Entity:** ___________________________
 
 **Attached Policies:**
-1. ___________________________
+1. AmazonS3ReadOnlyAccess
 2. ___________________________
 
 **Trust Relationship JSON:**
@@ -150,12 +144,12 @@ _____________________________________________________________
 
 ### Lambda Execution Role
 
-**Role Name:** ___________________________
+**Role Name:** Lambda-Basic-Execution-Role
 
 **Role ARN:** ___________________________
 
 **Attached Policies:**
-1. ___________________________
+1. AWSLambdaBasicExecutionRole
 2. ___________________________
 
 **Screenshot 6: Lambda Role**
@@ -165,16 +159,16 @@ _____________________________________________________________
 
 ### Cross-Account Access Role
 
-**Role Name:** ___________________________
+**Role Name:** CrossAccount-ReadOnly-Role
 
-**Role ARN:** ___________________________
+**Role ARN:** arn:aws:iam::033216807267:role/CrossAccount-ReadOnly-Role
 
 **External Account ID:** ___________________________
 
-**External ID:** ___________________________
+**External ID:** unique-external-id-123
 
 **Attached Policies:**
-1. ___________________________
+1. S3-ReadOnly-SpecificBucket
 
 **Screenshot 7: Cross-Account Role**
 ![Cross-Account Role](screenshots/07-cross-account-role.png)
@@ -185,7 +179,7 @@ _____________________________________________________________
 
 ### Policy Simulator Results
 
-**Policy Tested:** ___________________________
+**Policy Tested:** S3-ReadOnly-SpecificBucket
 
 **Test Results:**
 
@@ -206,35 +200,35 @@ _____________________________________________________________
 
 **Test 1: S3 List Bucket**
 ```bash
-# Command:
+# Command:aws s3 ls s3://pragash-kumar-bucket/
 
 # Output:
-_____________________________________________________________
-_____________________________________________________________
+2026-07-08 14:58:33        195 ec2-trust-policy.json
+2026-07-08 18:24:52         14 test.txt
+PS C:\Users\praga\cloud-engineering\ce-lab-iam-policies-roles> 
 
-# Result: ☐ Success ☐ Access Denied
+# Result: x Success ☐ Access Denied
 ```
 
 **Test 2: S3 Upload File**
 ```bash
-# Command:
+# Command:aws s3 cp test.txt s3://pragash-kumar-bucket/ --profile alice-test
 
 # Output:
-_____________________________________________________________
-_____________________________________________________________
+upload failed: .\test.txt to s3://pragash-kumar-bucket/test.txt An error occurred (AccessDenied) when calling the PutObject operation: User: arn:aws:iam::033216807267:user/alice is not authorized to perform: s3:PutObject on resource: "arn:aws:s3:::pragash-kumar-bucket/test.txt" because no identity-based policy allows the s3:PutObject action
 
-# Result: ☐ Success ☐ Access Denied (Expected)
+# Result: ☐ Success x Access Denied (Expected)
 ```
 
 **Test 3: S3 Download File**
 ```bash
-# Command:
+# Command:PS C:\Users\praga\cloud-engineering\ce-lab-iam-policies-roles> aws s3 cp s3://pragash-kumar-bucket/somefile.txt ./
 
 # Output:
-_____________________________________________________________
-_____________________________________________________________
+fatal error: An error occurred (404) when calling the HeadObject operation: Key "somefile.txt" does not exist
+PS C:\Users\praga\cloud-engineering\ce-lab-iam-policies-roles>
 
-# Result: ☐ Success ☐ Access Denied
+# Result: ☐ Success x Access Denied
 ```
 
 ---
@@ -243,23 +237,23 @@ _____________________________________________________________
 
 ### Custom Policy with Conditions
 
-**Policy Name:** ___________________________
+**Policy Name:**  pragash-S3-limit-bucket
 
-**Condition Type Used:** ☐ IP Address ☐ Time Window ☐ MFA ☐ Other: _______
+**Condition Type Used:** x IP Address ☐ Time Window ☐ MFA ☐ Other: _______
 
 **Policy JSON:**
 ```json
-{
+{{
   "Version": "2012-10-17",
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        
-      ],
-      "Resource": "",
+      "Action": ["s3:*"],
+      "Resource": "arn:aws:s3:::pragash-kumar-bucket",
       "Condition": {
-        
+        "IpAddress": {
+          "aws:SourceIp": "203.0.113.0/24"
+        }
       }
     }
   ]
@@ -268,9 +262,7 @@ _____________________________________________________________
 
 **Rationale for this policy:**
 ```
-_____________________________________________________________
-_____________________________________________________________
-_____________________________________________________________
+This policy enforces the Principle of Least Privilege by restricting S3 bucket access to a specific IP address range (aws:SourceIp). This prevents unauthorized access from external networks, significantly reducing the security risk for this resource.
 ```
 
 ---
@@ -281,17 +273,12 @@ _____________________________________________________________
 
 **Issue Description:**
 ```
-_____________________________________________________________
-_____________________________________________________________
-_____________________________________________________________
+cmd was wrong, then i checked with AI then added arn
 ```
 
 **Commands Used to Diagnose:**
 ```bash
-_____________________________________________________________
-_____________________________________________________________
-_____________________________________________________________
-```
+aws iam simulate-principal-policy --policy-source-arn arn:aws:iam::033216807267:user/admin --action-names s3:GetObject --resource-arns arn:aws:s3:::pragash-kumar-bucket/testfile.txt
 
 **Resolution:**
 ```
@@ -311,18 +298,17 @@ _____________________________________________________________
 
 **Your answer:**
 ```
-_____________________________________________________________
-_____________________________________________________________
-_____________________________________________________________
-_____________________________________________________________
+IAM roles are preferred over access keys for EC2 instances for several key security and operational reasons
+Improved Security_______________
+Reduced Management Overhead_
+Principle of Least Privilege_____________________________________Reduced Attack Surface
 ```
 
 ### 2. Explain the principle of least privilege and how you applied it in this lab.
 
 **Your answer:**
 ```
-_____________________________________________________________
-_____________________________________________________________
+The Principle of Least Privilege (PoLP) is a fundamental security concept that dictates that an entity—whether a user, a service, or an application—should be granted only the minimum level of access necessary to perform its intended function, and only for the duration required________________________________________
 _____________________________________________________________
 _____________________________________________________________
 ```
@@ -331,8 +317,7 @@ _____________________________________________________________
 
 **Your answer:**
 ```
-_____________________________________________________________
-_____________________________________________________________
+The primary difference between identity-based and resource-based policies lies in where the policy is attached and what it controls
 _____________________________________________________________
 ```
 
@@ -340,9 +325,7 @@ _____________________________________________________________
 
 **Your answer:**
 ```
-_____________________________________________________________
-_____________________________________________________________
-_____________________________________________________________
+In AWS, an explicit "Deny" is one of the most powerful tools in your security arsenal because it overrides any "Allow" permissions. Even if a user has broad administrative access, a single explicit "Deny" statement will block that action._____________________________________________
 ```
 
 ### 5. Describe a scenario where you'd use conditions in IAM policies.
@@ -360,17 +343,17 @@ _____________________________________________________________
 ## Summary of Resources Created
 
 **IAM Policies:**
-1. ___________________________  (ARN: ___________________________)
+1.pragash-S3-limit-bucket  (ARN: arn:aws:iam::033216807267:policy/pragash-S3-limit-bucket)
 2. ___________________________  (ARN: ___________________________)
 3. ___________________________  (ARN: ___________________________)
 
 **IAM Roles:**
-1. ___________________________  (ARN: ___________________________)
+1. EC2-S3-ReadOnly-Role  (ARN: arn:aws:iam::033216807267:role/EC2-S3-ReadOnly-Role)
 2. ___________________________  (ARN: ___________________________)
 3. ___________________________  (ARN: ___________________________)
 
 **Users Modified:**
-1. ___________________________
+1. admin — This is the user you configured and used to perform the troubleshooting steps, including updating the trust policy and detaching/deleting policies.
 
 ---
 
@@ -430,6 +413,6 @@ _____________________________________________________________
 
 ---
 
-**Lab Status:** ☐ Complete ☐ Needs Revision
+**Lab Status:** x Complete ☐ Needs Revision
 
-**Submission Date:** ___________________________
+**Submission Date:** 08-07-26
